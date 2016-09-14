@@ -22,7 +22,7 @@ public class HomeController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Model model) {
 
-		model.addAttribute("randomInt", new Random().nextInt(1000000));
+		model.addAttribute("randomInt", "CDMRI_"+System.currentTimeMillis());
 		model.addAttribute("industryTypeId", PaytmConstants.INDUSTRY_TYPE_ID);
 		model.addAttribute("chanelId", PaytmConstants.CHANNEL_ID);
 
@@ -48,6 +48,8 @@ public class HomeController {
 		parameters.put("MOBILE_NO", "7777777777");
 		parameters.put("EMAIL", "test@gmail.com");
 		parameters.put("CALLBACK_URL", "http://localhost:8080/paytm_test/resp");
+//		parameters.put("CALLBACK_URL", "http://eightfolds.in/paytm_test/resp");
+		
 
 		String checksumHash = CheckSumServiceHelper.getCheckSumServiceHelper()
 				.genrateCheckSum(PaytmConstants.MERCHANT_KEY, parameters);
@@ -70,7 +72,7 @@ public class HomeController {
 		return "pay";
 	}
 
-	@RequestMapping(value = "/resp", method = RequestMethod.POST)
+	@RequestMapping(value = "/resp", method = {RequestMethod.GET, RequestMethod.POST})
 	@ResponseBody
 	public String resp(Model model, ServletRequest request) throws Exception {
 		Enumeration<String> paramNames = request.getParameterNames();
